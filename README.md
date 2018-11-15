@@ -15,7 +15,7 @@ The following features have been **implemented**:
 * User login
 * Search for a course by code (i.e. COP3530)
 
-The following are **potential** features:  
+The following are **upcoming** features:  
 * Verify email address
 * Verify phone number
 * Include Account Kit by Facebook as registration option

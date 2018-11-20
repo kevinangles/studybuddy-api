@@ -4,6 +4,7 @@ const sequelize = new Sequelize(env.DATABASE_NAME, env.DATABASE_USERNAME, env.DA
   host: env.DATABASE_HOST,
   port: env.DATABASE_PORT,
   dialect: env.DATABASE_DIALECT,
+  operatorsAliases: Sequelize.Op,
   define: {
     underscored: true
   }

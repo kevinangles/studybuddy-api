@@ -1,0 +1,28 @@
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### Other ###
+# .pem
+*.pem
+
+# env-dev
+config/env-prod.js

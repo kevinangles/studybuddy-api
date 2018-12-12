@@ -14,8 +14,8 @@ module.exports = function (app) {
 
   //drop and resync with { force: true }
   db.sequelize.sync().then(() => {
-    app.listen(env.PORT, () => {
-      console.log('Express listening on port:', env.PORT);
+    app.listen(env.port, () => {
+      console.log('Express listening on port:', env.port);
     });
   });
 }

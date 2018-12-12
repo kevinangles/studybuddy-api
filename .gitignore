@@ -24,5 +24,16 @@ node_modules/
 # .pem
 *.pem
 
-# env-dev
-config/env-prod.js
+# environment variables
+config/development.js
+config/testing.js
+config/production.js
+
+# Elastic Beanstalk
+.elasticbeanstalk/
+
+.gitignore
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

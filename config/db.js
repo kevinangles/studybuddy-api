@@ -5,6 +5,9 @@ const sequelize = new Sequelize(env.DATABASE_NAME, env.DATABASE_USERNAME, env.DA
   host: env.DATABASE_HOST,
   port: env.DATABASE_PORT,
   dialect: 'postgres',
+  dialectOptions: {
+    ssl:'Amazon RDS'
+  },
   operatorsAliases: Sequelize.Op,
   define: {
     underscored: true

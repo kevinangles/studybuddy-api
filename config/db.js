@@ -3,7 +3,7 @@ const env = require('./');
 
 const sequelize = new Sequelize(env.DATABASE_NAME, env.DATABASE_USERNAME, env.DATABASE_PASSWORD, {
   host: env.DATABASE_HOST,
-  dialect: 'postgres',
+  dialect: env.DATABASE_DIALECT,
   operatorsAliases: Sequelize.Op,
   define: {
     underscored: true

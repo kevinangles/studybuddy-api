@@ -1,5 +1,5 @@
 # Studybuddy API
-Studybuddy's RESTful web service using Node, Express, PostgreSQL, and Sequelize.
+Studybuddy's RESTful web service using Node, Express, PostgreSQL, Sequelize, Google App Engine and Cloud SQL.
 <br/>
 <br/>
 

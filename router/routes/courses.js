@@ -7,6 +7,7 @@ module.exports = (app, db) => {
       where: { code: code },
       include: [{
         model: db.users,
+        attributes: { exclude: ['id'] },
         through: {
           attributes: []
         }

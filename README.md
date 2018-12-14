@@ -1,10 +1,15 @@
 # Studybuddy API
-Studybuddy's RESTful web service using Node, Express, PostgreSQL, and Sequelize.
+Studybuddy's RESTful web service using Node, Express, PostgreSQL, Sequelize, Google App Engine and Cloud SQL.
 <br/>
 <br/>
 
 ## About
 Studybuddy is a community of students looking for classmates to study with. Register now and skip the hassle of studying alone, and start studying together.
+<br/>
+<br/>
+👇 Check it out! 👇
+<br/>
+https://studybuddy.appspot.com
 <br/>
 <br/>
 

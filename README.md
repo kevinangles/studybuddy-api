@@ -19,6 +19,7 @@ The following features have been **implemented**:
 * Password encryption
 * User login
 * Search for a course by code (i.e. COP3530)
+* Map custom domain to app
 
 The following are **upcoming** features:  
 * Verify email address

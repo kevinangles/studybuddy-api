@@ -9,7 +9,7 @@ Studybuddy is a community of students looking for classmates to study with. Regi
 <br/>
 👇 Check it out! 👇
 <br/>
-https://studybuddy.appspot.com
+www.studybuddy.coffee
 <br/>
 <br/>
 

@@ -10,19 +10,29 @@ module.exports = (app, db) => {
     const password = req.body.password;
     const references = req.body.reference;
 
-    db.users.create({
-      first_name: first_name,
-      last_name: last_name,
-      email: email,
-      password: password
+    db.users.findOne({
+      where: { email: email }
     })
-      .then(newUser => {
-        for (reference of references) {
-          newUser.addCourse(reference);
+      .then(existingUser => {
+        if (existingUser) {
+          return res.status(409).send({ message: 'The email ' + existingUser.email + ' is taken' });
+        } else {
+          db.users.create({
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            password: password
+          })
+            .then(newUser => {
+              for (reference of references) {
+                newUser.addCourse(reference);
+              }
+              res.json(newUser);
+            })
+            .catch(next);
         }
-        res.json(newUser);
       })
-      .catch(next);
+      .catch(next)
   });
 
   // POST log a user in
@@ -36,12 +46,12 @@ module.exports = (app, db) => {
     })
       .then(foundUser => {
         bcrypt.compare(password, foundUser.password).then(match => {
-          if (match) { res.json(foundUser); } 
+          if (match) { res.json(foundUser); }
         });
       })
       .catch(next);
   });
 
-  
+
 
 };

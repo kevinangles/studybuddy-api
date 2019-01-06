@@ -9,7 +9,7 @@ Studybuddy is a community of students looking for classmates to study with. Regi
 <br/>
 👇 Check it out! 👇
 <br/>
-https://studybuddy.appspot.com
+www.studybuddy.coffee
 <br/>
 <br/>
 
@@ -19,6 +19,7 @@ The following features have been **implemented**:
 * Password encryption
 * User login
 * Search for a course by code (i.e. COP3530)
+* Map custom domain to app
 
 The following are **upcoming** features:  
 * Verify email address

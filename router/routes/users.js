@@ -30,7 +30,7 @@ module.exports = (app, db) => {
               for (reference of references) {
                 newUser.addCourse(reference);
               }
-              res.json(newUser);
+              generateToken(res, newUser);
             })
             .catch(next);
         }

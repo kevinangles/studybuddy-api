@@ -1,7 +1,6 @@
-const env = require('./../../config');
+const auth = require('./../auth');
 
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 module.exports = (app, db) => {
 
@@ -30,9 +29,11 @@ module.exports = (app, db) => {
               for (reference of references) {
                 newUser.addCourse(reference);
               }
-              generateToken(res, newUser);
+              auth.generateToken(res, newUser);
+              return null;
             })
             .catch(next);
+          return null;
         }
       })
       .catch(next)
@@ -49,15 +50,9 @@ module.exports = (app, db) => {
     })
       .then(foundUser => {
         bcrypt.compare(password, foundUser.password).then(match => {
-          if (match) { generateToken(res, foundUser); }
+          if (match) { auth.generateToken(res, foundUser); }
         });
       })
       .catch(next);
   });
-
-  function generateToken(res, user) {
-    const token = jwt.sign({ sub: user.uuid }, env.SECRET_OR_PRIVATE_KEY, { expiresIn: '1h' });
-    res.status(200).send({ token });
-  }
-
 };

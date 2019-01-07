@@ -16,11 +16,11 @@ var auth = {
     // Turn auth header into an array,get and decode token
     var token = req.header('authorization').split(' ')[1];
 
-    jwt.verify(token, '123', function (err, verified) {
+    jwt.verify(token, env.SECRET_OR_PRIVATE_KEY, function (err, verified) {
       if (err) {
         return res.status(401).send({ message: 'Token Expired' });
       } else {
-        var payload = jwt.verify(token, '123');
+        var payload = jwt.verify(token, env.SECRET_OR_PRIVATE_KEY);
 
         if (!payload) {
           return res.status(401).send({ message: 'Unathorized. Auth Header Invalid' });

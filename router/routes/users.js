@@ -1,6 +1,7 @@
 const auth = require('./../auth');
 
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 module.exports = (app, db) => {
 
@@ -29,11 +30,17 @@ module.exports = (app, db) => {
               for (reference of references) {
                 newUser.addCourse(reference);
               }
-              auth.generateToken(res, newUser);
-              return null;
+              const hash = crypto.randomBytes(20).toString('hex');
+              db.emailHashes.create({
+                uuid: newUser.uuid,
+                hash: hash
+              })
+                .then(readyUser => {
+                  auth.generateToken(res, readyUser);
+                })
+                .catch(next);
             })
             .catch(next);
-          return null;
         }
       })
       .catch(next)

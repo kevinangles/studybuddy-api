@@ -14,20 +14,18 @@ www.studybuddy.coffee
 <br/>
 
 ## Features
-The following features have been **implemented**:
-* User registration
-* Password encryption
-* User login
-* Search for a course by code (i.e. COP3530)
-* Map custom domain to app
-* JWT authentication
+- [x] User registration
+- [x] Password encryption
+- [x] User login
+- [x] Search for a course by code (i.e. COP3530)
+- [x] Map custom domain to app
+- [x] JWT authentication 
+- [ ] Verify email address
+- [ ] Verify phone number
+- [ ] Include Account Kit by Facebook as registration option
+- [ ] Filter results
+- [ ] Sort results
 
-The following are **upcoming** features:  
-* Verify email address
-* Verify phone number
-* Include Account Kit by Facebook as registration option
-* Filter results
-* Sort results
 <br/>
 
 ## API endpoints

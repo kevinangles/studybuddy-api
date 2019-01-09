@@ -62,4 +62,26 @@ module.exports = (app, db) => {
       })
       .catch(next);
   });
+
+  app.put('/verify/:hash/', (req, res, next) => {
+    const hash = req.params.hash;
+
+    db.emailHashes.findOne({
+      where: { hash: hash }
+    })
+      .then(foundUUID => {
+        db.users.findOne({
+          where: { uuid: foundUUID.uuid }
+        })
+          .then(foundUser => {
+            db.emailHashes.destroy({
+              where: { hash: hash }
+            })
+            foundUser.update({ email_verified: true });
+            res.json(foundUser);
+          })
+          .catch(next);
+      })
+      .catch(next);
+  })
 };

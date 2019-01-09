@@ -20,6 +20,7 @@ db.sequelize = sequelize;
 // Models
 db.users = require('../models/users.js')(sequelize, Sequelize);
 db.courses = require('../models/courses.js')(sequelize, Sequelize);
+db.emailHashes = require('../models/emailHashes')(sequelize, Sequelize);
 
 // Relations
 db.users.belongsToMany(db.courses, {through: 'users_courses'});

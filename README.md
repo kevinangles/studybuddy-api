@@ -18,9 +18,9 @@ www.studybuddy.coffee
 - [x] Password encryption
 - [x] User login
 - [x] Search for a course by code (i.e. COP3530)
-- [x] Map custom domain to app
+- [x] Custom domain
 - [x] JWT authentication 
-- [ ] Verify email address
+- [x] Verify email address
 - [ ] Verify phone number
 - [ ] Include Account Kit by Facebook as registration option
 - [ ] Filter results

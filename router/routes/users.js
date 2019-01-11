@@ -1,6 +1,5 @@
 const auth = require('./../auth');
 const mailer = require('./../mailer');
-const nodemailer = require("nodemailer");
 
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -100,15 +99,14 @@ module.exports = (app, db) => {
       where: { hash: hash }
     })
       .then(foundUUID => {
-        db.users.findOne({
-          where: { uuid: foundUUID.uuid }
+        foundUUID.destroy();
+        db.users.update({ email_verified: true }, {
+          where: { uuid: foundUUID.uuid },
+          returning: true,
+          plain: true
         })
-          .then(foundUser => {
-            db.emailHashes.destroy({
-              where: { hash: hash }
-            })
-            foundUser.update({ email_verified: true });
-            res.json(foundUser);
+          .then(updatedUser => {
+            res.json(updatedUser[1].dataValues);
           })
           .catch(next);
       })

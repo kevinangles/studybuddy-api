@@ -2,9 +2,11 @@ const env = require('./config');
 const router = require('./router');
 const db = require('./config/db.js');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 module.exports = function (app) {
   app.use(bodyParser.json());
+  app.use(cors({origin: 'http://localhost:4200'}));
   router(app, db);
 
   app.use((req, res, next) => {

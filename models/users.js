@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true
     },
+    phone_number: {
+      type: DataTypes.STRING,
+      required: true
+    },
     email_verified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false

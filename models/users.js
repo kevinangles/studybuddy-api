@@ -24,11 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      required: true
+      required: true,
     },
     phone_number: {
       type: DataTypes.STRING,
-      required: true
+      required: true,
+      unique: true
     },
     email_verified: {
       type: DataTypes.BOOLEAN,

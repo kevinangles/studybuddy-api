@@ -12,7 +12,7 @@ module.exports = (app, db) => {
     const last_name = req.body.last_name;
     const email = req.body.email;
     const password = req.body.password;
-    const references = req.body.reference;
+    const references = req.body.references;
 
     db.users.findOne({
       where: { email: email }

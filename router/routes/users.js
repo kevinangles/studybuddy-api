@@ -12,6 +12,7 @@ module.exports = (app, db) => {
     const last_name = req.body.last_name;
     const email = req.body.email;
     const password = req.body.password;
+    const phone_number = req.body.phone_number;
     const references = req.body.references;
 
     db.users.findOne({
@@ -25,7 +26,8 @@ module.exports = (app, db) => {
             first_name: first_name,
             last_name: last_name,
             email: email,
-            password: password
+            password: password,
+            phone_number: phone_number
           })
             .then(newUser => {
               for (reference of references) {

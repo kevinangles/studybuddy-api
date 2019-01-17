@@ -4,6 +4,8 @@ const mailer = require('./../mailer');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
+const sanitizePhoneNumber = phone_number => phone_number.replace(/\D/g,'');
+
 module.exports = (app, db) => {
 
   // POST register a new user
@@ -12,7 +14,7 @@ module.exports = (app, db) => {
     const last_name = req.body.last_name;
     const email = req.body.email;
     const password = req.body.password;
-    const phone_number = req.body.phone_number;
+    const phone_number = sanitizePhoneNumber(req.body.phone_number);
     const references = req.body.references;
 
     db.users.findOne({

@@ -6,6 +6,11 @@ const crypto = require('crypto');
 
 const sanitizePhoneNumber = phone_number => phone_number.replace(/\D/g,'');
 
+const verifyEmailDomain = email => {
+  const domain = 'fiu.edu';
+  return email.split('@').pop() === domain;
+}
+
 module.exports = (app, db) => {
 
   // POST register a new user
@@ -16,6 +21,8 @@ module.exports = (app, db) => {
     const password = req.body.password;
     const phone_number = sanitizePhoneNumber(req.body.phone_number);
     const references = req.body.references;
+
+    if(!verifyEmailDomain(email)) { return res.status(409).send({ message: 'Email must be valid FIU email' }); }
 
     db.users.findOne({
       where: { email: email }

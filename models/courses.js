@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Course = sequelize.define('course', {
     reference: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey: true,
       required: true
     },

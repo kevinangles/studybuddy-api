@@ -20,7 +20,7 @@ module.exports = (app, db) => {
     const email = req.body.email;
     const password = req.body.password;
     const phone_number = sanitizePhoneNumber(req.body.phone_number);
-    const references = req.body.references;
+    // const references = req.body.references;
 
     if (!verifyEmailDomain(email)) { return res.status(409).send({ message: 'Email must be valid FIU email' }); }
 
@@ -37,9 +37,9 @@ module.exports = (app, db) => {
           phone_number: phone_number
         })
           .then(newUser => {
-            for (reference of references) {
-              newUser.addCourse(reference);
-            }
+            // for (reference of references) {
+            //   newUser.addCourse(reference);
+            // }
             const hash = crypto.randomBytes(20).toString('hex');
             db.emailHashes.create({
               uuid: newUser.uuid,

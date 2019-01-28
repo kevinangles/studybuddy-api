@@ -22,22 +22,21 @@ module.exports = {
     const domain = 'fiu.edu';
 
     if (req.body.email.split('@').pop() !== domain) {
-      return res.status(409).send({ message: 'Email must be a valid FIU email address' });
+      return res.status(409).send({ message: 'The email must be a valid FIU email' });
     }
-    console.log("hi");
 
     next();
   },
   login: (req, res, user) => {
     // If false, there was no email match
     if (user === null) {
-      return res.status(409).send({ message: 'Invalid email' }); 
+      return res.status(409).send({ message: "The email doesn't exist in our records" }); 
     }
 
     // Compare the request's password with the hashed password
     bcrypt.compare(req.body.password, user.password).then(match => {
       if (!match) { 
-        return res.status(409).send({ message: 'Invalid password' });
+        return res.status(409).send({ message: "The password doesn't match our records" });
       }
       // If passwords match, generate authentication token
       auth.generateToken(res, user);

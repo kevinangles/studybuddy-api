@@ -15,10 +15,10 @@ module.exports = function (app) {
   });
 
   //drop and resync with { force: true }
-  db.sequelize.sync({force:true}).then(() => {
+  db.sequelize.sync().then(() => {
     app.listen(env.port, () => {
       console.log('Express listening on port:', env.port);
     });
-    db.sequelize.query("COPY courses FROM '/Users/kevin/studybuddy-rest-service/courses.csv' WITH (FORMAT csv)");
+    // db.sequelize.query("COPY courses FROM '/Users/kevin/studybuddy-rest-service/courses.csv' WITH (FORMAT csv)");
   });
 }

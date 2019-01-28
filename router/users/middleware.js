@@ -1,12 +1,56 @@
 const env = require('../../config');
+const auth = require('../auth');
 
+const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
 module.exports = {
-  isFiuEmail: (email, res) => {
+  preRegister: (req, res, next) => {
     const domain = 'fiu.edu';
-    if (email.split('@').pop() !== domain) {
+
+    // Check for FIU email
+    if (req.body.email.split('@').pop() !== domain) {
       return res.status(409).send({ message: 'Email must be a valid FIU email address' });
+    }
+
+    // Strip phone number of all characters except numbers
+    res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
+
+    next();
+  },
+  preLogin: (req, res, next) => {
+    const domain = 'fiu.edu';
+
+    if (req.body.email.split('@').pop() !== domain) {
+      return res.status(409).send({ message: 'Email must be a valid FIU email address' });
+    }
+    console.log("hi");
+
+    next();
+  },
+  login: (req, res, user) => {
+    // If false, there was no email match
+    if (user === null) {
+      return res.status(409).send({ message: 'Invalid email' }); 
+    }
+
+    // Compare the request's password with the hashed password
+    bcrypt.compare(req.body.password, user.password).then(match => {
+      if (!match) { 
+        return res.status(409).send({ message: 'Invalid password' });
+      }
+      // If passwords match, generate authentication token
+      auth.generateToken(res, user);
+    });
+  },
+  preVerify: (req, res, hash) => {
+    if (hash.length !== 20) {
+      return res.status(409).send({ message: 'Invalid verification hash' });
+    }
+  },
+  verify: (res, foundHash) => {
+    if (foundHash !== null) {
+      return res.status(409).send({ message: 'Invalid email verification link' });
     }
   },
   transporter: nodemailer.createTransport({

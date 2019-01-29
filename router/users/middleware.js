@@ -1,6 +1,7 @@
 const env = require('../../config');
 const auth = require('../auth');
 
+const check = require('express-validator');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
@@ -8,13 +9,25 @@ module.exports = {
   preRegister: (req, res, next) => {
     const domain = 'fiu.edu';
 
-    // Check for FIU email
-    if (req.body.email.split('@').pop() !== domain) {
-      return res.status(409).send({ message: 'Email must be a valid FIU email address' });
+    if (req.first_name == null) { return res.status(409).send({ message: 'A first name is required' }); }
+
+    if (req.last_name == null) { return res.status(409).send({ message: 'A last name is required' }); }
+
+    if (req.email == null) { 
+      return res.status(409).send({ message: 'A valid FIU email is required' });
+    } else {
+      if (req.body.email.split('@').pop() !== domain) {
+        return res.status(409).send({ message: 'The email must be a valid FIU email' });
+      }
     }
 
-    // Strip phone number of all characters except numbers
-    res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
+    if (req.password == null) { return res.status(409).send({ message: 'A valid password is required' }); }
+
+    if (req.phone_number == null) { 
+      return res.status(409).send({ message: 'A valid phone number is required' });
+    } else {
+      res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
+    }
 
     next();
   },

@@ -6,7 +6,7 @@ const cors = require('cors');
 
 module.exports = function (app) {
   app.use(bodyParser.json());
-  app.use(cors({origin: 'http://localhost:4200'}));
+  app.use(cors({origin: env.CORS_ORIGIN}));
   router(app, db);
 
   app.use((req, res, next) => {

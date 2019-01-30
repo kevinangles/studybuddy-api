@@ -7,7 +7,7 @@ module.exports = (app, db) => {
   app.post('/register/', middleware.preRegister, (req, res, next) => {
     // Email verification hash & URL
     const hash = crypto.randomBytes(20).toString('hex');
-    let verifyURL = 'https://www.studybuddy.coffee/verify/';
+    let verifyURL = 'https://sbclient.appspot.com/verify/';
 
     db.users.create({
       first_name: req.body.first_name,

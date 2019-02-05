@@ -9,11 +9,11 @@ module.exports = {
   preRegister: (req, res, next) => {
     const domain = 'fiu.edu';
 
-    if (req.first_name == '') { return res.status(409).send({ message: 'A first name is required' }); }
+    if (req.body.first_name == '') { return res.status(409).send({ message: 'A first name is required' }); }
 
-    if (req.last_name == '') { return res.status(409).send({ message: 'A last name is required' }); }
+    if (req.body.last_name == '') { return res.status(409).send({ message: 'A last name is required' }); }
 
-    if (req.email == '') { 
+    if (req.body.email == '') { 
       return res.status(409).send({ message: 'A valid FIU email is required' });
     } else {
       if (req.body.email.split('@').pop() !== domain) {
@@ -21,9 +21,9 @@ module.exports = {
       }
     }
 
-    if (req.password == '') { return res.status(409).send({ message: 'A valid password is required' }); }
+    if (req.body.password == '') { return res.status(409).send({ message: 'A valid password is required' }); }
 
-    if (req.phone_number == '') { 
+    if (req.body.phone_number == '') { 
       return res.status(409).send({ message: 'A valid phone number is required' });
     } else {
       res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');

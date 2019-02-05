@@ -1,5 +1,6 @@
 const env = require('../../config');
 const auth = require('../auth');
+const db = require('../../config/db');
 
 const check = require('express-validator');
 const bcrypt = require('bcrypt');
@@ -14,22 +15,28 @@ module.exports = {
     if (req.body.last_name == '') { return res.status(409).send({ message: 'A last name is required' }); }
 
     if (req.body.email == '') { 
-      return res.status(409).send({ message: 'A valid FIU email is required' });
-    } else {
-      if (req.body.email.split('@').pop() !== domain) {
-        return res.status(409).send({ message: 'The email must be a valid FIU email' });
-      }
+      return res.status(409).send({ message: 'An FIU email is required' });
+    } else if (req.body.email.split('@').pop() !== domain) {
+      return res.status(409).send({ message: 'The email must be a valid FIU email' });
     }
 
-    if (req.body.password == '') { return res.status(409).send({ message: 'A valid password is required' }); }
+    if (req.body.password == '') { return res.status(409).send({ message: 'A password is required' }); }
 
     if (req.body.phone_number == '') { 
-      return res.status(409).send({ message: 'A valid phone number is required' });
+      return res.status(409).send({ message: 'A phone number is required' });
     } else {
+      // Removes all characters, except digits
       res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
     }
 
-    next();
+    // Checks if email already exists in database
+    db.users.findOne({ 
+      where: { email: req.body.email },
+    }).then(found => {
+      if (found) {
+        return res.status(409).send({ message: 'The email already exists in our records' });
+      } else { next(); }
+    })
   },
   preLogin: (req, res, next) => {
     const domain = 'fiu.edu';

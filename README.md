@@ -7,9 +7,9 @@ Studybuddy's RESTful web service using Node, Express, PostgreSQL, Sequelize, Goo
 Studybuddy is a community of students looking for classmates to study with. Register now and skip the hassle of studying alone, and start studying together.
 <br/>
 <br/>
-👇 Check it out! 👇
+👇 Check out the web app repo here 👇
 <br/>
-www.studybuddy.coffee
+https://github.com/kevinangles/studybuddy
 <br/>
 <br/>
 

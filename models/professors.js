@@ -1,18 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-  const emailHash = sequelize.define('email_hashes', {
-    uuid: {
-      type: DataTypes.UUID,
+  const Professor = sequelize.define('professor', {
+    first_name: {
+      type: DataTypes.STRING,
       required: true,
     },
-    hash: {
+    last_name: {
       type: DataTypes.STRING,
       required: true,
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     underscored: true,
   });
 
-  return emailHash;
+  return Professor;
 };

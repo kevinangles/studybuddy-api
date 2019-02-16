@@ -2,28 +2,29 @@ module.exports = (sequelize, DataTypes) => {
   const Course = sequelize.define('course', {
     reference: {
       type: DataTypes.STRING,
-      primaryKey: true,
-      required: true
+      required: true,
     },
     code: {
       type: DataTypes.STRING,
-      required: true
+      required: true,
     },
     name: {
       type: DataTypes.STRING,
-      required: true
+      required: true,
     },
     professor: {
-      type: DataTypes.STRING,
-      required: true
+      type: DataTypes.INTEGER,
+      required: true,
     },
     type: {
       type: DataTypes.STRING,
-      required: true
-    }
-  }, {
-      timestamps: false,
-      underscored: true
-    });
+      required: true,
+    },
+  },
+  {
+    timestamps: false,
+    underscored: true,
+  });
+
   return Course;
 };

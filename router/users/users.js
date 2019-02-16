@@ -1,7 +1,7 @@
+const crypto = require('crypto');
+
 const auth = require('../auth');
 const middleware = require('./middleware');
-
-const crypto = require('crypto');
 
 module.exports = (app, db) => {
   app.post('/register/', middleware.preRegister, (req, res, next) => {
@@ -15,17 +15,18 @@ module.exports = (app, db) => {
       email: req.body.email,
       password: req.body.password,
       phone_number: res.locals.phone_number,
-    }).then(newUser => {
+    }).then((newUser) => {
       db.emailHashes.create({
         uuid: newUser.uuid,
-        hash: hash,
-    }).then(readyUser => {
-      verifyURL += readyUser.hash;
-      middleware.transporter.sendMail(middleware.mailOptions(newUser, verifyURL), (error, info) => {
-        if (error) { return console.log(error); }
-        console.log("Message sent: %s", info.messageId);
-      });
-      auth.generateToken(res, readyUser);
+        hash,
+      }).then((readyUser) => {
+        verifyURL += readyUser.hash;
+        middleware.transporter.sendMail(middleware.mailOptions(newUser, verifyURL),
+          (error, info) => {
+            if (error) { return console.log(error); }
+            return console.log('Message sent: %s', info.messageId);
+          });
+        auth.generateToken(res, readyUser);
       }).catch(next);
     }).catch(next);
   });
@@ -33,24 +34,24 @@ module.exports = (app, db) => {
   app.post('/login/', middleware.preLogin, (req, res, next) => {
     db.users.scope('withPassword').findOne({
       where: { email: req.body.email },
-      attributes: { exclude: ['id'] }
-    }).then(user => {
+      attributes: { exclude: ['id'] },
+    }).then((user) => {
       middleware.login(req, res, user);
     }).catch(next);
   });
 
   app.post('/verify/:hash/', middleware.preVerify, (req, res, next) => {
     db.emailHashes.findOne({
-      where: { hash: req.params.hash }
-    }).then(foundHash => {
+      where: { hash: req.params.hash },
+    }).then((foundHash) => {
       middleware.verify(res, foundHash);
       foundHash.destroy();
       db.users.update({ email_verified: true }, {
         where: { uuid: foundHash.uuid },
         returning: true,
-        plain: true
-    }).then(updatedUser => {
-      res.json(updatedUser[1].dataValues);
+        plain: true,
+      }).then((updatedUser) => {
+        res.json(updatedUser[1].dataValues);
       }).catch(next);
     }).catch(next);
   });

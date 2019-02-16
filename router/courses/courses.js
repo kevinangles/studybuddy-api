@@ -1,23 +1,13 @@
-const auth = require('../auth');
+// const auth = require('../auth');
+const middleware = require('./middleware');
 
-module.exports = (app, db) => {
-
-  // GET courses by code
-  app.get('/search/:code/', auth.checkAuthenticated, (req, res, next) => {
+module.exports = (app) => {
+  app.get('/search/:code/', (req, res, next) => {
     const code = req.params.code.toUpperCase();
-    db.courses.findAll({
-      where: { code: code },
-      include: [{
-        model: db.users,
-        attributes: { exclude: ['id'] },
-        through: {
-          attributes: []
-        }
-      }]
-    })
-    .then(courses => {
-      res.json(courses);
-    })
-  })
-
+    middleware.searchByCode(code)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch(next);
+  });
 };

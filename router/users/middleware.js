@@ -1,42 +1,46 @@
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+
 const env = require('../../config');
 const auth = require('../auth');
 const db = require('../../config/db');
-
-const check = require('express-validator');
-const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
 
 module.exports = {
   preRegister: (req, res, next) => {
     const domain = 'fiu.edu';
 
-    if (req.body.first_name == '') { return res.status(409).send({ message: 'A first name is required' }); }
+    if (req.body.first_name === '') {
+      return res.status(409).send({ message: 'A first name is required' });
+    }
 
-    if (req.body.last_name == '') { return res.status(409).send({ message: 'A last name is required' }); }
+    if (req.body.last_name === '') {
+      return res.status(409).send({ message: 'A last name is required' });
+    }
 
-    if (req.body.email == '') { 
+    if (req.body.email === '') {
       return res.status(409).send({ message: 'An FIU email is required' });
-    } else if (req.body.email.split('@').pop() !== domain) {
+    }
+
+    if (req.body.email.split('@').pop() !== domain) {
       return res.status(409).send({ message: 'The email must be a valid FIU email' });
     }
 
-    if (req.body.password == '') { return res.status(409).send({ message: 'A password is required' }); }
+    if (req.body.password === '') { return res.status(409).send({ message: 'A password is required' }); }
 
-    if (req.body.phone_number == '') { 
-      return res.status(409).send({ message: 'A phone number is required' });
-    } else {
-      // Removes all characters, except digits
-      res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
-    }
+    if (req.body.phone_number === '') { return res.status(409).send({ message: 'A phone number is required' }); }
+
+    // Removes all characters, except digits
+    res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
 
     // Checks if email already exists in database
-    db.users.findOne({ 
+    db.users.findOne({
       where: { email: req.body.email },
-    }).then(found => {
+    }).then((found) => {
       if (found) {
         return res.status(409).send({ message: 'The email already exists in our records' });
-      } else { next(); }
-    })
+      }
+      next();
+    });
   },
   preLogin: (req, res, next) => {
     const domain = 'fiu.edu';
@@ -50,12 +54,12 @@ module.exports = {
   login: (req, res, user) => {
     // If false, there was no email match
     if (user === '') {
-      return res.status(409).send({ message: "The email doesn't exist in our records" }); 
+      return res.status(409).send({ message: "The email doesn't exist in our records" });
     }
 
     // Compare the request's password with the hashed password
-    bcrypt.compare(req.body.password, user.password).then(match => {
-      if (!match) { 
+    bcrypt.compare(req.body.password, user.password).then((match) => {
+      if (!match) {
         return res.status(409).send({ message: "The password doesn't match our records" });
       }
       // If passwords match, generate authentication token
@@ -78,16 +82,15 @@ module.exports = {
     secure: true,
     auth: {
       user: env.NOREPLY_EMAIL_ADDRESS,
-      pass: env.NOREPLY_EMAIL_PASSWORD
-    }
+      pass: env.NOREPLY_EMAIL_PASSWORD,
+    },
   }),
-  mailOptions: (user, url) => {
-    return {
-      from: '"Studybuddy" <noreply@studybuddy.coffee>',
-      to: user.email,
-      subject: "Verify your Email Address",
-      html:
-        `
+  mailOptions: (user, url) => ({
+    from: '"Studybuddy" <noreply@studybuddy.coffee>',
+    to: user.email,
+    subject: 'Verify your Email Address',
+    html:
+      `
         <div style="width: 550px; background-color: #ffcc00; padding: 15px; margin: 0px auto;">
           <div style="width: 500px; background-color: #fff; padding: 25px; font-size: 18px;">
             <div style="width: 500px; text-align: center;">
@@ -105,7 +108,6 @@ module.exports = {
             Founder, Studybuddy<br>
           </div>
         </div>
-        `
-    }
-  },
-}
+      `,
+  }),
+};

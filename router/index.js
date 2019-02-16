@@ -1,6 +1,6 @@
 const routes = [
   require('./users/users'),
-  require('./courses/courses')
+  require('./courses/courses'),
 ];
 
 

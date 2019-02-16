@@ -21,7 +21,7 @@ db.sequelize = sequelize;
 db.users = require('../models/users.js')(sequelize, Sequelize);
 db.courses = require('../models/courses.js')(sequelize, Sequelize);
 db.emailHashes = require('../models/emailHashes')(sequelize, Sequelize);
-db.user_courses = require('../models/user_courses')(sequelize, Sequelize);
+db.user_courses = require('../models/userCourses')(sequelize, Sequelize);
 db.professors = require('../models/professors')(sequelize, Sequelize);
 
 // Relations

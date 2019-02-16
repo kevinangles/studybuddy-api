@@ -4,6 +4,9 @@
   "description": "Studybuddy's RESTful web service using Node, Express, PostgreSQL, and Sequelize.",
   "main": "index.js",
   "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "nodemon": "^1.18.7"
   },
   "scripts": {

@@ -29,11 +29,12 @@ https://github.com/kevinangles/studybuddy
 <br/>
 
 ## API endpoints
-| URL 	| Method 	| Data 	| Description 	| Response Codes 	|
-|:--------------:	|:------:	|:-------------------------------------------------------------------------------------------------------------------------:	|:---------------------:	|:-------------------------------------------:	|
-| /register/ 	| POST 	| {"first_name": "Kevin", "last_name": "Angles", "email": "kangl010@fiu.edu", "password": "P@ssword1", "reference": 81705 } 	| Register a new user 	| 200 - Returns new user's data 	|
-| /login/ 	| POST 	| {"email": "kangl010@fiu.edu", "password": "P@ssword1" } 	| Log a user in 	| 200 - Returns user's data 	|
-| /search/:code/ 	| GET 	|  	| Search course by code 	| 200 - Returns classes with list of students 	|
+|       URL      | Method |                                                            Data                                                           |         Description        |                Response Codes               |
+|:--------------:|:------:|:-------------------------------------------------------------------------------------------------------------------------:|:--------------------------:|:-------------------------------------------:|
+|   /register/   |  POST  | {"first_name": "Kevin", "last_name": "Angles", "email": "kangl010@fiu.edu", "password": "P@ssword1", "reference": 81705 } |     Register a new user    |        200 - Returns new user's data        |
+|     /login/    |  POST  |                                  {"email": "kangl010@fiu.edu", "password": "P@ssword1" }                                  |        Log a user in       |          200 - Returns user's data          |
+| /search/:code/ |   GET  |                                                                                                                           |    Search course by code   | 200 - Returns classes with list of students |
+| /verify/:hash/ |   PUT  |                                                                                                                           | Verify a new email address |          200 - Returns user object          |
 <br/>
 
 ## References

@@ -31,13 +31,8 @@ module.exports = (app, db) => {
     }).catch(next);
   });
 
-  app.post('/login/', middleware.preLogin, (req, res, next) => {
-    db.users.scope('withPassword').findOne({
-      where: { email: req.body.email },
-      attributes: { exclude: ['id'] },
-    }).then((user) => {
-      middleware.login(req, res, user);
-    }).catch(next);
+  app.post('/login/', (req, res, next) => {
+    middleware.login(req, res, next);
   });
 
   app.post('/verify/:hash/', middleware.preVerify, (req, res, next) => {

@@ -33,38 +33,41 @@ module.exports = {
     res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
 
     // Checks if email already exists in database
-    db.users.findOne({
+    return db.users.findOne({
       where: { email: req.body.email },
     }).then((found) => {
       if (found) {
         return res.status(409).send({ message: 'The email already exists in our records' });
       }
-      next();
-    });
+      return next();
+    }).catch(next);
   },
-  preLogin: (req, res, next) => {
+  login: (req, res, next) => {
     const domain = 'fiu.edu';
 
     if (req.body.email.split('@').pop() !== domain) {
       return res.status(409).send({ message: 'The email must be a valid FIU email' });
     }
 
-    next();
-  },
-  login: (req, res, user) => {
-    // If false, there was no email match
-    if (user === '') {
-      return res.status(409).send({ message: "The email doesn't exist in our records" });
-    }
-
-    // Compare the request's password with the hashed password
-    bcrypt.compare(req.body.password, user.password).then((match) => {
-      if (!match) {
-        return res.status(409).send({ message: "The password doesn't match our records" });
+    return db.users.scope('withPassword').findOne({
+      where: { email: req.body.email },
+      attributes: { exclude: ['id'] },
+    }).then((user) => {
+      // If false, there was no email match
+      if (user === '') {
+        return res.status(409).send({ message: "The email doesn't exist in our records" });
       }
-      // If passwords match, generate authentication token
-      auth.generateToken(res, user);
-    });
+
+      // Compare the request's password with the hashed password
+      return bcrypt.compare(req.body.password, user.password)
+        .then((match) => {
+          if (!match) {
+            return res.status(409).send({ message: "The password doesn't match our records" });
+          }
+          // If passwords match, generate authentication token
+          return auth.generateToken(res, user);
+        }).catch(next);
+    }).catch(next);
   },
   preVerify: (req, res, next) => {
     if (req.params.hash.length !== 40) {

@@ -66,15 +66,30 @@ module.exports = {
       auth.generateToken(res, user);
     });
   },
-  preVerify: (req, res, hash) => {
-    if (hash.length !== 40) {
+  preVerify: (req, res, next) => {
+    if (req.params.hash.length !== 40) {
       return res.status(409).send({ message: 'Invalid verification hash' });
     }
+    return next();
   },
-  verify: (res, foundHash) => {
-    if (foundHash !== '') {
-      return res.status(409).send({ message: 'Invalid email verification link' });
-    }
+  verifyHashExists: (req, res, next) => new Promise((resolve) => {
+    const { hash } = req.params;
+    db.emailHashes.findOne({
+      where: { hash },
+    }).then((record) => {
+      if (record === null) {
+        return res.status(409).send({ message: 'Invalid email verification link' });
+      }
+      return resolve(record);
+    }).catch(next);
+  }),
+  verifyEmail: (res, next, record) => {
+    const { uuid } = record.uuid;
+    db.users.update({ email_verified: true }, {
+      where: { uuid },
+      returning: true,
+      plain: true,
+    }).then(updatedUser => res.json(updatedUser[1].dataValues)).catch(next);
   },
   transporter: nodemailer.createTransport({
     host: 'smtp.domain.com',

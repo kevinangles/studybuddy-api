@@ -41,18 +41,10 @@ module.exports = (app, db) => {
   });
 
   app.post('/verify/:hash/', middleware.preVerify, (req, res, next) => {
-    db.emailHashes.findOne({
-      where: { hash: req.params.hash },
-    }).then((foundHash) => {
-      middleware.verify(res, foundHash);
-      foundHash.destroy();
-      db.users.update({ email_verified: true }, {
-        where: { uuid: foundHash.uuid },
-        returning: true,
-        plain: true,
-      }).then((updatedUser) => {
-        res.json(updatedUser[1].dataValues);
+    middleware.verifyHashExists(req, res, next)
+      .then((record) => {
+        record.destroy();
+        middleware.verifyEmail(res, next, record);
       }).catch(next);
-    }).catch(next);
   });
 };

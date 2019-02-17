@@ -1,10 +1,11 @@
-const env = require('./config');
-const router = require('./router');
-const db = require('./config/db.js');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-module.exports = function (app) {
+const env = require('./config');
+const router = require('./router');
+const db = require('./config/db.js');
+
+module.exports = (app) => {
   app.use(bodyParser.json());
   // app.enable('trust proxy');
 
@@ -21,11 +22,12 @@ module.exports = function (app) {
     next();
   });
 
-  //drop and resync with { force: true }
+  // drop and resync with { force: true }
   db.sequelize.sync().then(() => {
     app.listen(env.port, () => {
       console.log('Express listening on port:', env.port);
     });
+
     // db.sequelize.query("COPY courses FROM '/Users/kevin/studybuddy-rest-service/courses.csv' WITH (FORMAT csv)");
   });
-}
+};

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const env = require('../../config');
 const auth = require('../auth');
@@ -8,33 +9,25 @@ const db = require('../../config/db');
 module.exports = {
   preRegister: (req, res, next) => {
     const domain = 'fiu.edu';
+    const { body } = req;
 
-    if (req.body.first_name === '') {
-      return res.status(409).send({ message: 'A first name is required' });
+    // Check for all required fields
+    if (!(body.first_name && body.last_name && body.email && body.password
+      && body.phone_number)) {
+      return res.status(409).send({ message: 'All fields are required' });
     }
 
-    if (req.body.last_name === '') {
-      return res.status(409).send({ message: 'A last name is required' });
-    }
-
-    if (req.body.email === '') {
-      return res.status(409).send({ message: 'An FIU email is required' });
-    }
-
-    if (req.body.email.split('@').pop() !== domain) {
+    // Check for FIU email domain
+    if (body.email.split('@').pop() !== domain) {
       return res.status(409).send({ message: 'The email must be a valid FIU email' });
     }
 
-    if (req.body.password === '') { return res.status(409).send({ message: 'A password is required' }); }
+    // Remove all characters, except digits
+    res.locals.phone_number = body.phone_number.replace(/\D/g, '');
 
-    if (req.body.phone_number === '') { return res.status(409).send({ message: 'A phone number is required' }); }
-
-    // Removes all characters, except digits
-    res.locals.phone_number = req.body.phone_number.replace(/\D/g, '');
-
-    // Checks if email already exists in database
+    // Check for existing email
     return db.users.findOne({
-      where: { email: req.body.email },
+      where: { email: body.email },
     }).then((found) => {
       if (found) {
         return res.status(409).send({ message: 'The email already exists in our records' });
@@ -42,19 +35,36 @@ module.exports = {
       return next();
     }).catch(next);
   },
+  createUser: (req, res) => db.users.create({
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    password: req.body.password,
+    phone_number: res.locals.phone_number,
+  }),
+  createEmailHash: (newUser) => {
+    const hash = crypto.randomBytes(20).toString('hex');
+    const { uuid } = newUser;
+
+    return db.emailHashes.create({
+      uuid,
+      hash,
+    });
+  },
   login: (req, res, next) => {
     const domain = 'fiu.edu';
+    const { email } = req.body;
 
     if (req.body.email.split('@').pop() !== domain) {
       return res.status(409).send({ message: 'The email must be a valid FIU email' });
     }
 
     return db.users.scope('withPassword').findOne({
-      where: { email: req.body.email },
+      where: { email },
       attributes: { exclude: ['id'] },
     }).then((user) => {
       // If false, there was no email match
-      if (user === '') {
+      if (user === null) {
         return res.status(409).send({ message: "The email doesn't exist in our records" });
       }
 
@@ -68,12 +78,6 @@ module.exports = {
           return auth.generateToken(res, user);
         }).catch(next);
     }).catch(next);
-  },
-  preVerify: (req, res, next) => {
-    if (req.params.hash.length !== 40) {
-      return res.status(409).send({ message: 'Invalid verification hash' });
-    }
-    return next();
   },
   verifyHashExists: (req, res, next) => new Promise((resolve) => {
     const { hash } = req.params;
@@ -128,4 +132,11 @@ module.exports = {
         </div>
       `,
   }),
+  sendVerificationEmail(user, record) {
+    const url = `https://sbclient.appspot.com/verify/${record.hash}`;
+    this.transporter.sendMail(this.mailOptions(user, url), (error, info) => {
+      if (error) { return console.log(error); }
+      return console.log('Message sent: %s', info.messageId);
+    });
+  },
 };

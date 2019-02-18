@@ -1,32 +1,12 @@
-const crypto = require('crypto');
-
 const auth = require('../auth');
 const middleware = require('./middleware');
 
-module.exports = (app, db) => {
+module.exports = (app) => {
   app.post('/register/', middleware.preRegister, (req, res, next) => {
-    // Email verification hash & URL
-    const hash = crypto.randomBytes(20).toString('hex');
-    let verifyURL = 'https://sbclient.appspot.com/verify/';
-
-    db.users.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      password: req.body.password,
-      phone_number: res.locals.phone_number,
-    }).then((newUser) => {
-      db.emailHashes.create({
-        uuid: newUser.uuid,
-        hash,
-      }).then((readyUser) => {
-        verifyURL += readyUser.hash;
-        middleware.transporter.sendMail(middleware.mailOptions(newUser, verifyURL),
-          (error, info) => {
-            if (error) { return console.log(error); }
-            return console.log('Message sent: %s', info.messageId);
-          });
-        auth.generateToken(res, readyUser);
+    middleware.createUser(req, res).then((newUser) => {
+      middleware.createEmailHash(newUser).then((record) => {
+        middleware.sendVerificationEmail(newUser, record);
+        auth.generateToken(res, record);
       }).catch(next);
     }).catch(next);
   });
@@ -35,7 +15,7 @@ module.exports = (app, db) => {
     middleware.login(req, res, next);
   });
 
-  app.post('/verify/:hash/', middleware.preVerify, (req, res, next) => {
+  app.post('/verify/:hash/', (req, res, next) => {
     middleware.verifyHashExists(req, res, next)
       .then((record) => {
         record.destroy();

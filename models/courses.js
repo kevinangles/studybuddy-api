@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       required: true,
     },
-    professor: {
+    professor_id: {
       type: DataTypes.INTEGER,
       required: true,
     },

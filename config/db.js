@@ -27,8 +27,8 @@ db.professors = require('../models/professors')(sequelize, Sequelize);
 // Relations
 // db.users.belongsToMany(db.courses, {through: 'users_courses'});
 // db.courses.belongsToMany(db.users, {through: 'users_courses', otherKey: 'code'});
-db.professors.hasMany(db.courses, { foreignKey: 'id' });
-db.courses.belongsTo(db.professors, { as: 'professor_data', foreignKey: 'id' });
+db.professors.hasMany(db.courses, { foreignKey: 'professor_id' });
+db.courses.belongsTo(db.professors, { as: 'professor', foreignKey: 'professor_id' });
 db.users.belongsToMany(db.courses, { as: 'classes', through: 'user_courses' });
 db.courses.belongsToMany(db.users, { as: 'students', through: 'user_courses' });
 

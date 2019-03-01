@@ -8,14 +8,14 @@ module.exports = {
         model: db.users,
         as: 'students',
         through: { attributes: [] },
-        attributes: { exclude: ['id'] },
+        attributes: { exclude: ['id', 'password', 'email_verified', 'created_at', 'updated_at'] },
       },
       {
         model: db.professors,
-        as: 'professor_data',
+        as: 'professor',
         attributes: { exclude: ['id'] },
       },
     ],
-    attributes: { exclude: ['id', 'professor'] },
+    attributes: { exclude: ['id', 'professor_id'] },
   }),
 };

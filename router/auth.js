@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const env = require('../config');
 
-const auth = {
+module.exports = {
   generateToken: (res, user) => {
     const token = jwt.sign({ sub: user.uuid }, env.SECRET_OR_PRIVATE_KEY, { expiresIn: '1h' });
     return res.status(200).send({ token });
@@ -16,7 +16,7 @@ const auth = {
     // Turn auth header into an array,get and decode token
     const token = req.header('authorization').split(' ')[1];
 
-    jwt.verify(token, env.SECRET_OR_PRIVATE_KEY, (err) => {
+    return jwt.verify(token, env.SECRET_OR_PRIVATE_KEY, (err) => {
       if (err) {
         return res.status(401).send({ message: 'Token Expired' });
       }
@@ -34,5 +34,3 @@ const auth = {
     });
   },
 };
-
-module.exports = auth;

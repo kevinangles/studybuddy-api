@@ -27,7 +27,5 @@ module.exports = (app) => {
     app.listen(env.port, () => {
       console.log('Express listening on port:', env.port);
     });
-
-    // db.sequelize.query("COPY courses FROM '/Users/kevin/studybuddy-rest-service/courses.csv' WITH (FORMAT csv)");
   });
 };

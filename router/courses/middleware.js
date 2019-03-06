@@ -13,7 +13,7 @@ module.exports = {
       {
         model: db.professors,
         as: 'professor',
-        attributes: { exclude: ['id'] },
+        attributes: { exclude: ['id'] }
       },
     ],
     attributes: { exclude: ['id', 'professor_id'] },

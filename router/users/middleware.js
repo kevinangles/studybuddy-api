@@ -113,27 +113,25 @@ module.exports = {
     subject: 'Verify your Email Address',
     html:
       `
-        <div style="width: 550px; background-color: #ffcc00; padding: 15px; margin: 0px auto;">
-          <div style="width: 500px; background-color: #fff; padding: 25px; font-size: 18px;">
-            <div style="width: 500px; text-align: center;">
-              <img src="https://res.cloudinary.com/studybuddy/image/upload/c_scale,q_100,w_350/v1547215183/logo.png">
-            </div><br>
-            Hi, ${user.first_name}!<br>
-            <br>
-            Thank you for joining Studybuddy! We're really excited to welcome you into our community of students from Florida International University. Before you start connecting with your peers, we need you to take a second to <b>verify your email address by clicking on the button below</b>:<br>
-            <br>
-            <a style="width: 175px; height: 60px; text-decoration: none; margin: 0px auto; background-color: #ffcc00; color: #fff; text-align: center; line-height: 60px; display: block;" href="${url}">Verify email</a>
-            <br>
-            Thanks again for joining 🤓<br>
-            <br>
-            Kevin Angles Belledonne<br>
-            Founder, Studybuddy<br>
+        <div style="width: 500px; background-color: #fff; margin-top: 15px; margin-right: auto; margin-left: auto; font-size: 18px;">
+          <div style="width: 500px; text-align: center; margin-top: 15px; margin-bottom: 25px;">
+            <img src="https://res.cloudinary.com/studybuddy/image/upload/c_scale,q_auto:best,w_250/v1552065636/logo.png">
           </div>
+          Hi, ${user.first_name}!<br>
+          <br>
+          We're really excited to welcome you into our community of students from Florida International University. Before you start connecting with your peers, we need you to take a second to <b>verify your email address by clicking on the button below</b>:<br>
+          <br>
+          <a style="width: 150px; height: 50px; text-decoration: none; margin-right: auto; margin-bottom: 15px; margin-left: auto; background-color: #fdbd00; color: #fff; text-align: center; line-height: 50px; display: block; font-weight: 500; border-radius: 0.25rem;" href="${url}">Verify email</a>
+          <br>
+          Stay awesome,<br>
+          <br>
+          Kevin Angles Belledonne<br>
+          Founder, Studybuddy<br>
         </div>
       `,
   }),
   sendVerificationEmail(user, record) {
-    const url = `https://sbclient.appspot.com/verify/${record.hash}`;
+    const url = `https://studybuddy.coffee/verify/${record.hash}`;
     this.transporter.sendMail(this.mailOptions(user, url), (error, info) => {
       if (error) { return console.log(error); }
       return console.log('Message sent: %s', info.messageId);

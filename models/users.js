@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    details: {
+      type: DataTypes.STRING(150),
+    },
   },
   {
     defaultScope: {

@@ -4,7 +4,7 @@ const env = require('../config');
 
 module.exports = {
   generateToken: (res, user) => {
-    const token = jwt.sign({ sub: user.uuid }, env.SECRET_OR_PRIVATE_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ sub: user.uuid }, env.SECRET_OR_PRIVATE_KEY, { expiresIn: '1d' });
     return res.status(200).send({ token });
   },
   checkAuthenticated: (req, res, next) => {

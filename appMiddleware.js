@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const env = require('./config');
 const router = require('./router');
@@ -7,14 +8,11 @@ const db = require('./config/db.js');
 
 module.exports = (app) => {
   app.use(bodyParser.json());
-  // app.enable('trust proxy');
-
-  // app.use(function (req, res, next) {
-  //   if (req.secure) { return next(); }
-  //   res.redirect("https://" + req.headers.host + req.url);
-  // });
+  app.use(helmet());
 
   app.use(cors({ origin: env.CORS_ORIGIN }));
+
+  app.options('*', cors())
   router(app, db);
 
   app.use((req, res, next) => {
